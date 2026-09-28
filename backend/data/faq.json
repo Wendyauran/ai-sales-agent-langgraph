@@ -1,0 +1,44 @@
+[
+  {
+    "id": "faq-process",
+    "question": "Bagaimana proses pengerjaan website di XYZ Studio?",
+    "keywords": ["proses", "pengerjaan", "workflow", "cara kerja", "tahapan"],
+    "answer": "Proses kami: (1) Konsultasi kebutuhan, (2) Penawaran & kesepakatan, (3) Desain (wireframe/mockup), (4) Development, (5) Review & revisi, (6) Launch, (7) Maintenance (opsional)."
+  },
+  {
+    "id": "faq-revision",
+    "question": "Berapa kali revisi yang didapat?",
+    "keywords": ["revisi", "ubah", "ganti desain"],
+    "answer": "Setiap paket sudah termasuk 2x revisi mayor di tahap desain. Revisi tambahan di luar itu dikenakan biaya sesuai kompleksitas."
+  },
+  {
+    "id": "faq-payment",
+    "question": "Bagaimana sistem pembayaran?",
+    "keywords": ["bayar", "pembayaran", "dp", "cicil", "termin"],
+    "answer": "Pembayaran menggunakan sistem termin: 50% di awal (DP) sebagai tanda jadi, 50% sebelum website live/launch."
+  },
+  {
+    "id": "faq-timeline",
+    "question": "Berapa lama waktu pengerjaan?",
+    "keywords": ["berapa lama", "durasi", "waktu pengerjaan", "estimasi"],
+    "answer": "Estimasi waktu bervariasi sesuai jenis layanan, mulai dari 7 hari untuk landing page hingga 45 hari untuk aplikasi web custom. Timeline detail akan dikonfirmasi setelah kebutuhan jelas."
+  },
+  {
+    "id": "faq-hosting-domain",
+    "question": "Apakah hosting dan domain termasuk?",
+    "keywords": ["hosting", "domain", "server"],
+    "answer": "Hosting dan domain tidak termasuk dalam paket dasar, namun kami bisa membantu pengadaan dan setup-nya dengan biaya tambahan, atau klien bisa menyediakan sendiri."
+  },
+  {
+    "id": "faq-support",
+    "question": "Apakah ada support setelah website selesai?",
+    "keywords": ["support", "garansi", "bug", "setelah launch", "pasca launch"],
+    "answer": "Kami memberikan garansi bug-fix gratis selama 30 hari pasca-launch. Untuk support jangka panjang, tersedia paket Maintenance & Support Retainer bulanan."
+  },
+  {
+    "id": "faq-tech-stack",
+    "question": "Teknologi apa yang digunakan?",
+    "keywords": ["teknologi", "stack", "dibuat pakai apa", "framework"],
+    "answer": "Kami menggunakan teknologi modern seperti Next.js/React untuk frontend dan sesuai kebutuhan project untuk backend, memastikan website cepat, aman, dan mudah di-maintain."
+  }
+]
