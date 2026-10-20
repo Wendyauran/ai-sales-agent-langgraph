@@ -1,6 +1,7 @@
 import os
 from typing import Literal
 
+from datetime import datetime
 from dotenv import load_dotenv
 from langchain_core.messages import SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -59,6 +60,9 @@ Do not interrogate the user with a rigid checklist. Ask naturally, one or two th
 Known information so far:
 {lead_info_summary}
 
+Today's actual date is: {current_date} ({current_weekday})
+When confirming a scheduled meeting date/time to the user, always restate the exact value returned by check_availability or book_appointment. Never calculate or guess the date yourself.
+
 This conversation's conversation_id is: {conversation_id}
 Always pass this exact conversation_id whenever you call save_lead.
 {lead_id_note}
@@ -89,12 +93,15 @@ qualify_tools = ToolNode(qualify_tools_list)
 
 def qualify_agent_node(state: AgentState) -> dict:
     llm_with_tools = llm_heavy.bind_tools(qualify_tools_list)
+    now = datetime.now()
     lead_id_note = (
         f"This lead's lead_id is: {state.lead_id}. Pass this exact lead_id when calling book_appointment." if state.lead_id
         else "No lead_id yet — call save_lead first before attempting to book an appointment."
     )
     system_prompt = QUALIFY_SYSTEM_PROMPT.format(
         lead_info_summary=_format_lead_info(state.lead_info),
+        current_date=now.strftime("%Y-%m-%d"),
+        current_weekday=now.strftime("%A"),
         conversation_id=state.conversation_id,
         lead_id_note=lead_id_note
     )
