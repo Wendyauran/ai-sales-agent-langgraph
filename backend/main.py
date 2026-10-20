@@ -68,7 +68,10 @@ def chat(request: ChatRequest) -> ChatResponse:
     result = agent_app.invoke(initial_state)
     final_state = AgentState(**result)
 
-    reply_text = _extract_text(final_state.messages[-1].content)
+    reply_text = _extract_text(final_state.messages[-1].content).strip()
+
+    if not reply_text:
+        reply_text = "Mohon maaf, kami belum bisa memberikan jawaban yang pasti. Mohon tunggu sebentar."
 
     save_turn(conversation_id, final_state.lead_id, request.message, reply_text)
     return ChatResponse(conversation_id=conversation_id, reply=reply_text)

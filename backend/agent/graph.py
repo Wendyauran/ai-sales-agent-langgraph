@@ -114,7 +114,9 @@ def qualify_agent_node(state: AgentState) -> dict:
 # =========
 # FAQ
 # =========
-FAQ_SYSTEM_PROMPT = """You are support assistant for a web agency. Answer the user's question using the search_faq tool to find the agency's official answer. If the tool return found=False, say you don't have an official answer for that and suggest escalating to a human instead of guessing."""
+FAQ_SYSTEM_PROMPT = """You are support assistant for a web agency. Answer the user's question using the search_faq tool to find the agency's official answer. If the tool return found=False, say you don't have an official answer for that and suggest escalating to a human instead of guessing.
+
+After calling search_faq, you must always reply with a complete natural language answer to the user based on the tool's result. Never reply with empty or blank content."""
 
 
 faq_tools_list = [search_faq]
