@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 type Message = {
     role: "user" | "assistant";
@@ -12,6 +12,18 @@ export default function ChatWidget() {
     const [input, setInput] = useState("");
     const [conversationId, setConversationId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!isLoading) {
+            textareaRef.current?.focus();
+        }
+    }, [isLoading]);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages, isLoading]);
 
     async function sendMessage() {
         const trimmed = input.trim();
@@ -21,6 +33,10 @@ export default function ChatWidget() {
         setMessage((prev) => [...prev, userMessage]);
         setInput("");
         setIsLoading(true);
+
+        if (textareaRef.current) {
+            textareaRef.current.style.height = "auto";
+        }
 
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/chat`, {
@@ -46,8 +62,19 @@ export default function ChatWidget() {
         }
     }
 
-    function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-        if (event.key === "Enter") {
+    function handleInputChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+        setInput(event.target.value);
+
+        const textarea = textareaRef.current;
+        if (textarea) {
+            textarea.style.height = "auto";
+            textarea.style.height = `${textarea.scrollHeight}px`;
+        }
+    }
+
+    function handleKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
             sendMessage();
         }
     }
@@ -117,17 +144,19 @@ export default function ChatWidget() {
             </div>
           </div>
         )}
+        <div ref={messagesEndRef} />
       </div>
 
-      <div className="flex gap-2 border-t border-zinc-200 bg-white p-3">
-        <input
-          type="text"
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Tulis pesan..."
-          className="flex-1 rounded-full border border-zinc-300 px-4 py-2 text-sm text-zinc-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-          disabled={isLoading}
+        <div className="flex items-end gap-2 border-t border-zinc-200 bg-white p-3">
+        <textarea
+            ref={textareaRef}
+            value={input}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            placeholder="Tulis pesan..."
+            rows={1}
+            disabled={isLoading}
+            className="max-h-32 flex-1 resize-none overflow-y-auto rounded-2xl border border-zinc-300 px-4 py-2 text-sm text-zinc-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
         />
         <button
           onClick={sendMessage}
