@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertTriangle, Calendar, UserCog, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Session } from "@supabase/supabase-js";
@@ -90,6 +91,28 @@ type Escalation = {
   leads: { name: string | null } | null;
 };
 
+function statusBadgeClass(status: string): string {
+  switch (status) {
+    case "qualified":
+      return "bg-blue-100 text-blue-700";
+    case "booked":
+    case "completed":
+    case "resolved":
+      return "bg-emerald-100 text-emerald-700";
+    case "scheduled":
+      return "bg-indigo-100 text-indigo-700";
+    case "escalated":
+    case "open":
+      return "bg-red-100 text-red-700";
+    case "cancelled":
+      return "bg-rose-100 text-rose-700";
+    case "rescheduled":
+      return "bg-amber-100 text-amber-700";
+    default:
+      return "bg-zinc-100 text-zinc-700";
+  }
+}
+
 function Dashboard() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -122,88 +145,155 @@ function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 p-8">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-zinc-900">Admin Dashboard</h1>
+    <div className="min-h-screen bg-zinc-50">
+      <header className="flex items-center justify-between bg-linear-to-r from-teal-600 to-cyan-600 px-8 py-5 shadow-md">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20">
+            <UserCog className="h-5 w-5 text-white" />
+          </div>
+          <h1 className="text-xl font-bold text-white">Admin Dashboard</h1>
+        </div>
         <button
           onClick={handleLogout}
-          className="rounded-lg border border-zinc-300 px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-100"
+          className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-600"
         >
           Logout
         </button>
+      </header>
+
+      <div className="p-8">
+        <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="flex items-center gap-4 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-indigo-100">
+              <Users className="h-5 w-5 text-indigo-600" />
+            </div>
+            <div>
+              <div className="text-sm text-zinc-500">Total Leads</div>
+              <div className="text-2xl font-bold text-zinc-900">{leads.length}</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-100">
+              <Calendar className="h-5 w-5 text-emerald-600" />
+            </div>
+            <div>
+              <div className="text-sm text-zinc-500">Booking Terjadwal</div>
+              <div className="text-2xl font-bold text-zinc-900">
+                {bookings.filter((b) => b.status === "scheduled").length}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-red-100">
+              <AlertTriangle className="h-5 w-5 text-red-600" />
+            </div>
+            <div>
+              <div className="text-sm text-zinc-500">Eskalasi Terbuka</div>
+              <div className="text-2xl font-bold text-zinc-900">
+                {escalations.filter((e) => e.status === "open").length}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section className="mb-10">
+          <h2 className="mb-3 text-lg font-semibold text-zinc-900">Calon Klien</h2>
+          <div className="overflow-hidden rounded-lg shadow-sm">
+            <table className="w-full text-sm">
+              <thead className="bg-teal-700 text-left text-teal-50">
+                <tr>
+                  <th className="w-12 px-4 py-3">No.</th>
+                  <th className="px-4 py-3">Nama</th>
+                  <th className="px-4 py-3">Jenis Bisnis</th>
+                  <th className="px-4 py-3">Budget</th>
+                  <th className="px-4 py-3">Timeline</th>
+                  <th className="px-4 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white">
+                {leads.map((lead, index) => (
+                  <tr key={lead.id} className="border-b border-zinc-100 even:bg-zinc-50">
+                    <td className="px-4 py-3 text-zinc-500">{index + 1}</td>
+                    <td className="px-4 py-3 text-zinc-900">{lead.name ?? "-"}</td>
+                    <td className="px-4 py-3 text-zinc-900">{lead.business_type ?? "-"}</td>
+                    <td className="px-4 py-3 text-zinc-900">{lead.budget_range ?? "-"}</td>
+                    <td className="px-4 py-3 text-zinc-900">{lead.timeline ?? "-"}</td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${statusBadgeClass(lead.status)}`}>
+                        {lead.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="mb-3 text-lg font-semibold text-zinc-900">Jadwal Meeting</h2>
+          <div className="overflow-hidden rounded-lg shadow-sm">
+            <table className="w-full text-sm">
+              <thead className="bg-teal-700 text-left text-teal-50">
+                <tr>
+                  <th className="w-12 px-4 py-3">No.</th>
+                  <th className="px-4 py-3">Lead</th>
+                  <th className="px-4 py-3">Jadwal</th>
+                  <th className="px-4 py-3">Durasi</th>
+                  <th className="px-4 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white">
+                {bookings.map((booking, index) => (
+                  <tr key={booking.id} className="border-b border-zinc-100 even:bg-zinc-50">
+                    <td className="px-4 py-3 text-zinc-500">{index + 1}</td>
+                    <td className="px-4 py-3 text-zinc-900">{booking.leads?.name ?? "-"}</td>
+                    <td className="px-4 py-3 text-zinc-900">{new Date(booking.scheduled_at).toLocaleString("id-ID")}</td>
+                    <td className="px-4 py-3 text-zinc-900">{booking.duration_minutes} menit</td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${statusBadgeClass(booking.status)}`}>
+                        {booking.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-lg font-semibold text-zinc-900">Eskalasi</h2>
+          <div className="overflow-hidden rounded-lg shadow-sm">
+            <table className="w-full text-sm">
+              <thead className="bg-teal-700 text-left text-teal-50">
+                <tr>
+                  <th className="w-12 px-4 py-3">No.</th>
+                  <th className="px-4 py-3">Lead</th>
+                  <th className="px-4 py-3">Alasan</th>
+                  <th className="px-4 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white">
+                {escalations.map((escalation, index) => (
+                  <tr key={escalation.id} className="border-b border-zinc-100 even:bg-zinc-50">
+                    <td className="px-4 py-3 text-zinc-500">{index + 1}</td>
+                    <td className="px-4 py-3 text-zinc-900">{escalation.leads?.name ?? "-"}</td>
+                    <td className="px-4 py-3 text-zinc-900">{escalation.reason}</td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${statusBadgeClass(escalation.status)}`}>
+                        {escalation.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
-
-      <section className="mb-10">
-        <h2 className="mb-3 text-lg font-semibold text-zinc-900">Leads ({leads.length})</h2>
-        <table className="w-full overflow-hidden rounded-lg bg-white text-sm shadow-sm">
-          <thead className="bg-zinc-100 text-left">
-            <tr>
-              <th className="px-4 py-2 text-zinc-700">Nama</th>
-              <th className="px-4 py-2 text-zinc-700">Jenis Bisnis</th>
-              <th className="px-4 py-2 text-zinc-700">Budget</th>
-              <th className="px-4 py-2 text-zinc-700">Timeline</th>
-              <th className="px-4 py-2 text-zinc-700">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leads.map((lead) => (
-              <tr key={lead.id} className="border-t border-zinc-100">
-                <td className="px-4 py-2 text-zinc-900">{lead.name ?? "-"}</td>
-                <td className="px-4 py-2 text-zinc-900">{lead.business_type ?? "-"}</td>
-                <td className="px-4 py-2 text-zinc-900">{lead.budget_range ?? "-"}</td>
-                <td className="px-4 py-2 text-zinc-900">{lead.timeline ?? "-"}</td>
-                <td className="px-4 py-2 text-zinc-900">{lead.status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-
-      <section className="mb-10">
-        <h2 className="mb-3 text-lg font-semibold text-zinc-900">Bookings ({bookings.length})</h2>
-        <table className="w-full overflow-hidden rounded-lg bg-white text-sm shadow-sm">
-          <thead className="bg-zinc-100 text-left">
-            <tr>
-              <th className="px-4 py-2 text-zinc-700">Lead</th>
-              <th className="px-4 py-2 text-zinc-700">Jadwal</th>
-              <th className="px-4 py-2 text-zinc-700">Durasi</th>
-              <th className="px-4 py-2 text-zinc-700">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookings.map((booking) => (
-              <tr key={booking.id} className="border-t border-zinc-100">
-                <td className="px-4 py-2 text-zinc-900">{booking.leads?.name ?? "-"}</td>
-                <td className="px-4 py-2 text-zinc-900">{new Date(booking.scheduled_at).toLocaleString("id-ID")}</td>
-                <td className="px-4 py-2 text-zinc-900">{booking.duration_minutes} menit</td>
-                <td className="px-4 py-2 text-zinc-900">{booking.status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-
-      <section>
-        <h2 className="mb-3 text-lg font-semibold text-zinc-900">Escalations ({escalations.length})</h2>
-        <table className="w-full overflow-hidden rounded-lg bg-white text-sm shadow-sm">
-          <thead className="bg-zinc-100 text-left">
-            <tr>
-              <th className="px-4 py-2 text-zinc-700">Lead</th>
-              <th className="px-4 py-2 text-zinc-700">Alasan</th>
-              <th className="px-4 py-2 text-zinc-700">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {escalations.map((escalation) => (
-              <tr key={escalation.id} className="border-t border-zinc-100">
-                <td className="px-4 py-2 text-zinc-900">{escalation.leads?.name ?? "-"}</td>
-                <td className="px-4 py-2 text-zinc-900">{escalation.reason}</td>
-                <td className="px-4 py-2 text-zinc-900">{escalation.status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
     </div>
   );
 }
