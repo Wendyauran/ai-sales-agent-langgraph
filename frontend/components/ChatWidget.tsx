@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { Bot } from "lucide-react";
 
 type Message = {
     role: "user" | "assistant";
@@ -83,7 +84,7 @@ export default function ChatWidget() {
     <div className="flex w-full max-w-md flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl">
       <div className="flex items-center gap-3 bg-linear-to-r from-indigo-600 to-violet-600 px-5 py-4">
         <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 text-lg">
-          🤖
+          <Bot className="h-5 w-5 text-white" />
         </div>
         <div>
           <div className="font-semibold text-white">XYZ Studio Assistant</div>
@@ -98,7 +99,7 @@ export default function ChatWidget() {
         {messages.length === 0 && (
           <div className="flex items-end gap-2 self-start">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-violet-500 text-sm text-white">
-              🤖
+              <Bot className="h-4 w-4 text-white" />
             </div>
             <div className="max-w-65 rounded-2xl rounded-bl-sm bg-white px-4 py-2 text-sm text-zinc-700 shadow-sm">
               Halo! Ada yang bisa kami bantu soal website Anda?
@@ -117,7 +118,7 @@ export default function ChatWidget() {
           >
             {message.role === "assistant" && (
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-violet-500 text-sm text-white">
-                🤖
+                <Bot className="h-4 w-4 text-white" />
               </div>
             )}
             <div
@@ -135,7 +136,7 @@ export default function ChatWidget() {
         {isLoading && (
           <div className="flex items-end gap-2 self-start">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-violet-500 text-sm text-white">
-              🤖
+              <Bot className="h-4 w-4 text-white" />
             </div>
             <div className="flex items-center gap-1 rounded-2xl rounded-bl-sm bg-white px-4 py-3 shadow-sm">
               <span className="h-2 w-2 animate-bounce rounded-full bg-zinc-400 [animation-delay:-0.3s]"></span>
