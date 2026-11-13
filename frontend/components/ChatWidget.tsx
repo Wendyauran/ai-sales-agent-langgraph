@@ -82,13 +82,13 @@ export default function ChatWidget() {
 
   return (
     <div className="flex w-full max-w-md flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl">
-      <div className="flex items-center gap-3 bg-linear-to-r from-indigo-600 to-violet-600 px-5 py-4">
+      <div className="flex items-center gap-3 bg-linear-to-r from-teal-600 to-cyan-600 px-5 py-4">
         <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 text-lg">
           <Bot className="h-5 w-5 text-white" />
         </div>
         <div>
           <div className="font-semibold text-white">XYZ Studio Assistant</div>
-          <div className="flex items-center gap-1 text-xs text-indigo-100">
+          <div className="flex items-center gap-1 text-xs text-teal-100">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
             Online
           </div>
@@ -98,7 +98,7 @@ export default function ChatWidget() {
       <div className="flex h-96 flex-col gap-4 overflow-y-auto bg-zinc-50 p-4">
         {messages.length === 0 && (
           <div className="flex items-end gap-2 self-start">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-violet-500 text-sm text-white">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-teal-500 to-cyan-500 text-sm text-white">
               <Bot className="h-4 w-4 text-white" />
             </div>
             <div className="max-w-65 rounded-2xl rounded-bl-sm bg-white px-4 py-2 text-sm text-zinc-700 shadow-sm">
@@ -117,14 +117,14 @@ export default function ChatWidget() {
             }
           >
             {message.role === "assistant" && (
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-violet-500 text-sm text-white">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-teal-500 to-cyan-500 text-sm text-white">
                 <Bot className="h-4 w-4 text-white" />
               </div>
             )}
             <div
                 className={
                     message.role === "user"
-                    ? "max-w-65 min-w-0 wrap-break-word rounded-2xl rounded-br-sm bg-linear-to-br from-indigo-600 to-violet-600 px-4 py-2 text-sm text-white shadow-sm"
+                    ? "max-w-65 min-w-0 wrap-break-word rounded-2xl rounded-br-sm bg-linear-to-br from-teal-600 to-cyan-600 px-4 py-2 text-sm text-white shadow-sm"
                     : "max-w-65 min-w-0 wrap-break-word rounded-2xl rounded-bl-sm bg-white px-4 py-2 text-sm text-zinc-800 shadow-sm"
                 }
             >
@@ -135,7 +135,7 @@ export default function ChatWidget() {
 
         {isLoading && (
           <div className="flex items-end gap-2 self-start">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-violet-500 text-sm text-white">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-teal-500 to-cyan-500 text-sm text-white">
               <Bot className="h-4 w-4 text-white" />
             </div>
             <div className="flex items-center gap-1 rounded-2xl rounded-bl-sm bg-white px-4 py-3 shadow-sm">
@@ -157,12 +157,12 @@ export default function ChatWidget() {
             placeholder="Tulis pesan..."
             rows={1}
             disabled={isLoading}
-            className="max-h-32 flex-1 resize-none overflow-y-auto rounded-2xl border border-zinc-300 px-4 py-2 text-sm text-zinc-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            className="max-h-32 flex-1 resize-none overflow-y-auto rounded-2xl border border-zinc-300 px-4 py-2 text-sm text-zinc-900 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
         />
         <button
           onClick={sendMessage}
           disabled={isLoading}
-          className="rounded-full bg-linear-to-br from-indigo-600 to-violet-600 px-5 py-2 text-sm font-medium text-white shadow-md transition hover:shadow-lg disabled:opacity-50"
+          className="rounded-full bg-linear-to-br from-teal-600 to-cyan-600 px-5 py-2 text-sm font-medium text-white shadow-md transition hover:shadow-lg disabled:opacity-50"
         >
           Kirim
         </button>
