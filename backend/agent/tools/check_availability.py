@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 from langchain_core.tools import tool
 
 MOCK_SLOT_HOURS = [9, 11, 14, 16]
+JAKARTA_TZ = ZoneInfo("Asia/Jakarta")
 
 
 @tool
@@ -12,7 +14,7 @@ def check_availability(days_ahead: int = 5) -> list[str]:
     checked_days = 0
 
     while checked_days < days_ahead:
-        candidate = datetime.now() + timedelta(days=day_offset)
+        candidate = datetime.now(JAKARTA_TZ) + timedelta(days=day_offset)
         day_offset += 1
 
         # Skip weekends (Saturday or Sunday)

@@ -2,6 +2,7 @@ import os
 from typing import Literal
 
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
 from langchain_core.messages import SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -21,6 +22,8 @@ load_dotenv()
 
 llm_light = ChatGoogleGenerativeAI(model=os.environ["GEMINI_MODEL_LIGHT"])
 llm_heavy = ChatGoogleGenerativeAI(model=os.environ["GEMINI_MODEL_HEAVY"])
+
+JAKARTA_TZ = ZoneInfo("Asia/Jakarta")
 
 
 # ============
@@ -96,7 +99,7 @@ qualify_tools = ToolNode(qualify_tools_list)
 
 def qualify_agent_node(state: AgentState) -> dict:
     llm_with_tools = llm_heavy.bind_tools(qualify_tools_list)
-    now = datetime.now()
+    now = datetime.now(JAKARTA_TZ)
     lead_id_note = (
         f"This lead's lead_id is: {state.lead_id}. Pass this exact lead_id when calling book_appointment." if state.lead_id
         else "No lead_id yet — call save_lead first before attempting to book an appointment."
