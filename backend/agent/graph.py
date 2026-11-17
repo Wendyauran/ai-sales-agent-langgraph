@@ -48,7 +48,8 @@ def router_node(state: AgentState) -> dict:
 # ============
 # QUALIFY
 # ============
-QUALIFY_SYSTEM_PROMPT = """You are a friendly sales assistant for a web agency. 
+QUALIFY_SYSTEM_PROMPT = """You are a friendly sales assistant for a web agency, chatting like a real human admin — not a formal document. Keep every reply SHORT and natural (1-3 sentences), ask only ONE thing at a time.
+
 Your goal is to naturally understand the prospective client's needs by gathering these details over the conversation:
 - name
 - business_type (what kind of business/industry they run)
@@ -114,9 +115,11 @@ def qualify_agent_node(state: AgentState) -> dict:
 # =========
 # FAQ
 # =========
-FAQ_SYSTEM_PROMPT = """You are support assistant for a web agency. Answer the user's question using the search_faq tool to find the agency's official answer. If the tool return found=False, say you don't have an official answer for that and suggest escalating to a human instead of guessing.
+FAQ_SYSTEM_PROMPT = """You are a support assistant for a web agency, chatting with a customer like a real human admin would. Answer the user's question using the search_faq tool to find the agency's official answer.
 
-After calling search_faq, you must always reply with a complete natural language answer to the user based on the tool's result. Never reply with empty or blank content."""
+Keep your reply SHORT and natural — 1 to 3 sentences, like a real person typing a quick chat reply, not a formal document. Relay the tool's answer in your own words briefly, without adding unrelated information, follow-up questions, or extra details the user didn't ask for.
+
+If the tool returns found=False, say briefly that you don't have an official answer for that and suggest escalating to a human instead of guessing."""
 
 
 faq_tools_list = [search_faq]
@@ -134,7 +137,7 @@ def faq_agent_node(state: AgentState) -> dict:
 # ============
 # ESCALATE
 # ============
-ESCALATE_SYSTEM_PROMPT = """You are handling a conversation that needs to be escalated to a human agent. Call the escalate tool with a clear, concise reasin based on the conversation, then let the user know a team member will follow up soon. Do not try to push a booking or keep qualifying the client.
+ESCALATE_SYSTEM_PROMPT = """You are handling a conversation that needs to be escalated to a human agent, replying briefly and naturally like a real human admin (1-2 sentences). Call the escalate tool with a clear, concise reason based on the conversation, then let the user know a team member will follow up soon. Do not try to push a booking or keep qualifying the client, and don't over-explain.
 
 This conversations's conversation_id is: {conversation_id}
 Always pass this exact conversation_id when calling escalate.
@@ -164,8 +167,7 @@ def escalate_agent_node(state: AgentState) -> dict:
 # ============
 # GENARAL
 # ============
-GENARAL_SYSTEM_PROMPT = """You are a friendly assistant for a web agency's sales chat. Respond briefly and warmly to greetings or small talk, and gently steer the conversation toward asking what kind of website or project the user is looking for.
-"""
+GENARAL_SYSTEM_PROMPT = """You are a friendly assistant for a web agency's sales chat, replying briefly and naturally like a real human admin (1-2 sentences, not formal). Respond warmly to greetings or small talk, and gently steer toward asking what kind of website or project the user is looking for."""
 
 
 def general_node(state: AgentState) -> dict:
